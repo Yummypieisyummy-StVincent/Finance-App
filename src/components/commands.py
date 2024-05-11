@@ -1,13 +1,14 @@
 import dataStorage
-addBox = None
-def Add_Button(newVal):
+import itemClass
+from datetime import date
+def Add_Button(transactionBox = 0.0, dateBox="-", reasonBox="-", jobBox="-"):
     try:
-        addBox = float(newVal)
-        print("Add")
-        print(newVal)
+        newEntry = itemClass.Entry(jobBox, dateBox, reasonBox, float(transactionBox))
+        dataStorage.save(newEntry)
     except ValueError:
-        print("You must enter a number")
-        print(addBox)
+        print("Invalid input: " + transactionBox + " - " + dateBox + " - " + reasonBox + " - " + jobBox)
+        newEntry = None
+        return
 
-def Open_Button():
-    currentFile = dataStorage.openFile()
+#def Open_Button():
+#    currentFile = dataStorage.openFile()

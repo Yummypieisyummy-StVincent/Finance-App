@@ -20,10 +20,10 @@ def interface():
     DateBox = DateEntry(UI)
     DateBox.place(relx=0.5, rely=0.45, anchor="center")
 
-    AddBox = tk.CTkEntry(UI, placeholder_text="Amount")
-    AddBox.place(relx=0.5, rely=0.4, anchor="center")
+    TransactionBox = tk.CTkEntry(UI, placeholder_text="Amount")
+    TransactionBox.place(relx=0.5, rely=0.4, anchor="center")
 
-    AddButton = tk.CTkButton(UI, text="Add", command=lambda: commands.Add_Button(AddBox.get()))
+    AddButton = tk.CTkButton(UI, text="Add", command=lambda: commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()))
     AddButton.place(relx=0.5, rely=0.5, anchor="center")
 
     OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button)
