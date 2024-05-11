@@ -1,4 +1,3 @@
-import tkinter
 import customtkinter as tk
 import commands
 from tkcalendar import DateEntry
@@ -23,9 +22,9 @@ def interface():
     TransactionBox = tk.CTkEntry(UI, placeholder_text="Amount")
     TransactionBox.place(relx=0.5, rely=0.4, anchor="center")
 
-    AddButton = tk.CTkButton(UI, text="Add", command=lambda: commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()))
+    AddButton = tk.CTkButton(UI, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox)])
     AddButton.place(relx=0.5, rely=0.5, anchor="center")
 
-    OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button)
+    OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button())
     OpenButton.place(relx=0.5, rely=0.6, anchor="center")
     return UI
