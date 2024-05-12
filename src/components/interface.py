@@ -16,11 +16,11 @@ def interface():
     ReasonBox = tk.CTkEntry(UI, placeholder_text="Reason of transaction")
     ReasonBox.place(relx=0.5, rely=0.35, anchor="center")
 
-    DateBox = DateEntry(UI)
-    DateBox.place(relx=0.5, rely=0.45, anchor="center")
-
     TransactionBox = tk.CTkEntry(UI, placeholder_text="Amount")
     TransactionBox.place(relx=0.5, rely=0.4, anchor="center")
+
+    DateBox = DateEntry(UI)
+    DateBox.place(relx=0.5, rely=0.45, anchor="center")
 
     AddButton = tk.CTkButton(UI, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox)])
     AddButton.place(relx=0.5, rely=0.5, anchor="center")

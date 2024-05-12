@@ -8,6 +8,9 @@ def Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox):
     ReasonBox.delete(0, 'end')
     DateBox.date = date.today()
     TransactionBox.delete(0, 'end')
+    JobBox.placeholder_text = "Job"
+    ReasonBox.placeholder_text = "Reason of transaction"
+    TransactionBox.placeholder_text = "Amount"
 
 def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
     if((transactionBox == "") or (dateBox == "") or (reasonBox == "") or (jobBox == "")):
