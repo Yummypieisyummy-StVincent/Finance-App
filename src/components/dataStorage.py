@@ -3,18 +3,21 @@ import json
 
 file = None
 
-def load(itemClassObject):
+def load(itemList):
     global file
     file = filedialog.askopenfile(mode="r", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
     if file is None:
         return
-    itemClassObject.from_dict(json.load(file))
-    return itemClassObject
+    for entry in json.load(file):
+        itemList.append(entry)
+    #itemClassObject.from_dict(json.load(file))
+    #return itemClassObject
+    return itemList
 
-def save(itemClassObject):
+def save(itemList):
     global file
     if file is None:
-        file = filedialog.asksaveasfile(mode="a", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
+        file = filedialog.asksaveasfile(mode="w", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
     if file is None:
         return
-    json.dump(itemClassObject.to_dict(), file, indent=1)
+    json.dump(itemList, indent=1)

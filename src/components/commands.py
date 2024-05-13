@@ -3,6 +3,11 @@ import itemClass
 from datetime import date
 from tkinter import *
 
+listOfEntries = []
+
+def Save_Button():
+    dataStorage.save(listOfEntries)
+
 def Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox):
     JobBox.delete(0, 'end')
     ReasonBox.delete(0, 'end')
@@ -22,11 +27,17 @@ def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
     try:
         newEntry = itemClass.Entry(jobBox, dateBox, reasonBox, float(transactionBox))
         print("Pass")
-        dataStorage.save(newEntry)
+        listOfEntries.append(newEntry)
     except ValueError:
         print("Invalid input: " + transactionBox + " - " + dateBox + " - " + reasonBox + " - " + jobBox)
         newEntry = None
         return
 
 def Open_Button():
-    currentFile = dataStorage.load()
+    currentFile = dataStorage.load(listOfEntries)
+    if currentFile is not None:
+        for entry in currentFile:
+            listOfEntries.append(entry)
+        print("Entries loaded")
+    else:
+        print("No file selected")
