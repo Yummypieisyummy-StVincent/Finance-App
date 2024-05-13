@@ -28,6 +28,7 @@ def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
         newEntry = itemClass.Entry(jobBox, dateBox, reasonBox, float(transactionBox))
         print("Pass")
         listOfEntries.append(newEntry)
+        print(listOfEntries)
     except ValueError:
         print("Invalid input: " + transactionBox + " - " + dateBox + " - " + reasonBox + " - " + jobBox)
         newEntry = None

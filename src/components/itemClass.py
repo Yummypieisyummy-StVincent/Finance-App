@@ -15,3 +15,6 @@ class Entry():
 
     def __str__(self):
         return f"{self.job} - {self.date} - {self.description} - {self.amount}"
+    
+    def print(self):
+        print(f"{self.job} - {self.date} - {self.description} - {self.amount}")

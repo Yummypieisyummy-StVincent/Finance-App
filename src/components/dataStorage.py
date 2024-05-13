@@ -1,23 +1,22 @@
 from tkinter import filedialog
 import json
 
-file = None
-
 def load(itemList):
-    global file
     file = filedialog.askopenfile(mode="r", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
     if file is None:
         return
-    for entry in json.load(file):
-        itemList.append(entry)
-    #itemClassObject.from_dict(json.load(file))
-    #return itemClassObject
+    try:
+        data = json.load(file)
+        for entry in data:
+            itemList.append(entry)
+    except json.JSONDecodeError:
+        print("File could not be parsed.")
+    file.close()
     return itemList
 
 def save(itemList):
-    global file
-    if file is None:
-        file = filedialog.asksaveasfile(mode="w", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
+    file = filedialog.asksaveasfile(mode="w", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
     if file is None:
         return
-    json.dump(itemList, indent=1)
+    json.dump({item.to_dict() for item in itemList}, file, indent=1)
+    file.close()
