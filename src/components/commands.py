@@ -35,10 +35,6 @@ def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
         return
 
 def Open_Button():
-    currentFile = dataStorage.load(listOfEntries)
-    if currentFile is not None:
-        for entry in currentFile:
-            listOfEntries.append(entry)
-        print("Entries loaded")
-    else:
-        print("No file selected")
+    global listOfEntries 
+    listOfEntries = dataStorage.load()
+    print("Open_Button list created")
