@@ -5,6 +5,14 @@ from tkcalendar import DateEntry
 tk.set_appearance_mode("SystemDefault")
 tk.set_default_color_theme("blue")
 
+def centerWindow(window):
+    window.update_idletasks()
+    width = window.winfo_width()
+    height = window.winfo_height()
+    x = (window.winfo_screenwidth() // 2) - (width // 2)
+    y = (window.winfo_screenheight() // 2) - (height // 2)
+    window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+
 def EntryBox(masterFrame):
     JobBox = tk.CTkEntry(master=masterFrame, placeholder_text="Job")
     JobBox.place(relx=0.5, rely=0.3, anchor="center")
@@ -24,12 +32,13 @@ def EntryBox(masterFrame):
 def interface():
     UI = tk.CTk()
     UI.geometry("800x600")
+    #centerWindow(UI)
     UI.title("Finance Tracker")
 
     EntryBox(UI)
     
 
-    OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button())
+    OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button(UI))
     OpenButton.place(relx=0.5, rely=0.6, anchor="center")
 
     SaveButton = tk.CTkButton(UI, text="Save", command=lambda: commands.Save_Button())
