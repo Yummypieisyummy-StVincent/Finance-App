@@ -22,22 +22,24 @@ def centerWindow(window):
 
 def EntryBox(masterFrame):
     entryFrame = tk.CTkFrame(master=masterFrame)
-    entryFrame.grid(row = 1, column = 2)
+    #entryFrame.grid(row = 1, column = 2)
 
     JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job")
-    JobBox.place(relx=0.5, rely=0.3, anchor="center")
+    JobBox.pack(anchor="center")
 
     ReasonBox = tk.CTkEntry(master=entryFrame, placeholder_text="Reason of transaction")
-    ReasonBox.place(relx=0.5, rely=0.35, anchor="center")
+    ReasonBox.pack(anchor="center")
 
     TransactionBox = tk.CTkEntry(master=entryFrame, placeholder_text="Amount")
-    TransactionBox.place(relx=0.5, rely=0.4, anchor="center")
+    TransactionBox.pack(anchor="center")
 
     DateBox = DateEntry(master=entryFrame)
-    DateBox.place(relx=0.5, rely=0.45, anchor="center")
+    DateBox.pack(anchor="center")
 
     AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox)])
-    AddButton.place(relx=0.5, rely=0.5, anchor="center")
+    AddButton.pack(anchor="center")
+
+    entryFrame.pack(side="right", padx=10, pady=10)
 
 def Listbox(masterFrame):
     listFrame = tk.CTkFrame(master=masterFrame)
@@ -56,7 +58,9 @@ def Listbox(masterFrame):
     transactionIndex = tk.CTkLabel(master=itemFrame1, text="Transaction")
     transactionIndex.pack(side="left", padx=10)
 
-    listFrame.grid(row=0, column=0, columnspan=2, sticky="nsew")
+    listFrame.pack(side="left", padx=10, pady=10)
+
+    #listFrame.grid(row=0, column=0, columnspan=2, sticky="nsew")
     itemFrame1.pack()
     itemFrame2.pack()
     itemFrame3.pack()
@@ -71,9 +75,10 @@ def interface():
     UI.title("Finance Tracker")
 
 
-    gridLayout(UI)
-    EntryBox(UI)
+    #gridLayout(UI)
     Listbox(UI)
+    EntryBox(UI)
+    
     
 
     #OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button(UI))
