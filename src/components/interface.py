@@ -1,3 +1,5 @@
+#This file creates the components of the window and calls their functionality from commands.py
+
 import customtkinter as tk
 import commands
 from tkcalendar import DateEntry
@@ -28,20 +30,19 @@ def EntryBox(masterFrame, listFrame):
 
 def Labelbox(labelFrame):
 
-    jobIndex = tk.CTkLabel(master=labelFrame, text="Job", width=50)
-    jobIndex.pack(side="left", padx=10)
+    jobIndex = tk.CTkLabel(master=labelFrame, text="Job", width=100)
+    jobIndex.pack(side="left", padx=10, fill="x")
     dateIndex = tk.CTkLabel(master=labelFrame, text="Date", width=50)
-    dateIndex.pack(side="left", padx=10)
-    reasonIndex = tk.CTkLabel(master=labelFrame, text="Reason", width=50)
-    reasonIndex.pack(side="left", padx=10)
+    dateIndex.pack(side="left", padx=10, fill="x")
+    reasonIndex = tk.CTkLabel(master=labelFrame, text="Reason", width=100)
+    reasonIndex.pack(side="left", padx=10, fill="x")
     transactionIndex = tk.CTkLabel(master=labelFrame, text="Transaction", width=50)
-    transactionIndex.pack(side="left", padx=10)
+    transactionIndex.pack(side="left", padx=10, fill="x")
     labelFrame.pack()
 
 def interface():
     UI = tk.CTk()
     UI.geometry("800x600")
-    #centerWindow(UI)
     UI.title("Finance Tracker")
 
     masterListFrame = tk.CTkFrame(master=UI)
@@ -49,10 +50,11 @@ def interface():
     Labelbox(labelFrame)
     listFrame = tk.CTkFrame(master=masterListFrame)
     listFrame.pack()
-    masterListFrame.pack(side="left", padx=10, pady=10)
+    masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
     
     EntryBox(UI, listFrame)
     
+
     
 
     OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button(UI, listFrame))

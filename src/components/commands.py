@@ -1,3 +1,5 @@
+#This file gives the functionality of the components from interface.py
+
 import dataStorage
 import itemClass
 from datetime import date
@@ -6,16 +8,19 @@ import customtkinter as tk
 from customtkinter import CTkToplevel
 
 listOfEntries = []
+startIndex = 0 #This specifies the start index of the list - used when scrolling through large lists of entries
 
 def populateListbox(listFrame):
+    global startIndex
+    start = startIndex
     for entry in listFrame.winfo_children():
         entry.destroy()
-    for entry in listOfEntries:
+    for entry in range(start, len(listOfEntries), start+1):
         itemFrame = tk.CTkFrame(master=listFrame)
-        job = tk.CTkLabel(master=itemFrame, text=entry.job, width=50)
-        date = tk.CTkLabel(master=itemFrame, text=entry.date, width=50)
-        reason = tk.CTkLabel(master=itemFrame, text=entry.description, width=50)
-        transaction = tk.CTkLabel(master=itemFrame, text=entry.amount, width=50)
+        job = tk.CTkLabel(master=itemFrame, text=listOfEntries[entry].job, width=50)
+        date = tk.CTkLabel(master=itemFrame, text=listOfEntries[entry].date, width=50)
+        reason = tk.CTkLabel(master=itemFrame, text=listOfEntries[entry].description, width=50)
+        transaction = tk.CTkLabel(master=itemFrame, text=listOfEntries[entry].amount, width=50)
         job.pack(side="left", padx=10)
         date.pack(side="left", padx=10)
         reason.pack(side="left", padx=10)
@@ -58,8 +63,13 @@ def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
         newEntry = None
         return
 
+def Set_Start():
+    global startIndex
+    startIndex = 0
+
+
 def Open_Button(UI, listFrame):  
-    global listOfEntries 
+    global listOfEntries, startIndex
 
     if(len(listOfEntries) > 0):
         Popup = CTkToplevel(UI)
@@ -67,10 +77,28 @@ def Open_Button(UI, listFrame):
         Popup.title("Warning")
         Popup.geometry("500x100")
         tk.CTkLabel(Popup, text="Are you sure you want to open a new file? Current data will be overwritten!").pack()
-        tk.CTkButton(Popup, text="Yes", command=lambda: [dataStorage.load(), Popup.destroy()]).pack()
+        tk.CTkButton(Popup, text="Yes", command=lambda: [dataStorage.load(), Popup.destroy(), Set_Start()]).pack()
         tk.CTkButton(Popup, text="No", command=Popup.destroy).pack()
     else:
         listOfEntries = dataStorage.load()
     print("Open_Button list created")
 
+    populateListbox(listFrame)
+
+def Down_Button(listFrame, button):
+    global startIndex
+    if(startIndex < len(listOfEntries)):
+        button.config(state=ACTIVE)
+        startIndex = startIndex + 1
+    if(startIndex == len(listOfEntries)):
+        button.config(state=DISABLED)
+    populateListbox(listFrame)
+
+def Up_Button(listFrame, button):
+    global startIndex
+    if(startIndex > 0):
+        button.config(state=ACTIVE)
+        startIndex = startIndex - 1
+    if(startIndex == 0):
+        button.config(state=DISABLED)
     populateListbox(listFrame)
