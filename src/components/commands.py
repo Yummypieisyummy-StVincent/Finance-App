@@ -7,6 +7,21 @@ from customtkinter import CTkToplevel
 
 listOfEntries = []
 
+def populateListbox(listFrame):
+    for entry in listFrame.winfo_children():
+        entry.destroy()
+    for entry in listOfEntries:
+        itemFrame = tk.CTkFrame(master=listFrame)
+        job = tk.CTkLabel(master=itemFrame, text=entry.job, width=50)
+        date = tk.CTkLabel(master=itemFrame, text=entry.date, width=50)
+        reason = tk.CTkLabel(master=itemFrame, text=entry.description, width=50)
+        transaction = tk.CTkLabel(master=itemFrame, text=entry.amount, width=50)
+        job.pack(side="left", padx=10)
+        date.pack(side="left", padx=10)
+        reason.pack(side="left", padx=10)
+        transaction.pack(side="left", padx=10)
+        itemFrame.pack()
+
 def Save_Button():
     dataStorage.save(listOfEntries)
 
@@ -43,7 +58,7 @@ def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
         newEntry = None
         return
 
-def Open_Button(UI):  
+def Open_Button(UI, listFrame):  
     global listOfEntries 
 
     if(len(listOfEntries) > 0):
@@ -57,3 +72,5 @@ def Open_Button(UI):
     else:
         listOfEntries = dataStorage.load()
     print("Open_Button list created")
+
+    populateListbox(listFrame)

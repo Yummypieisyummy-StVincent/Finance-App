@@ -1,5 +1,5 @@
 import interface
 
-UI = interface.interface()
+Application = interface.interface()
 
-UI.mainloop()
+Application.mainloop()
