@@ -40,17 +40,30 @@ def Labelbox(labelFrame):
     transactionIndex.pack(side="left", padx=10, fill="x")
     labelFrame.pack()
 
+def Scroll_Bar(ScrollFrame, listFrame):
+    Scroll_Up = tk.CTkButton(master=ScrollFrame, text="Up", width=10, command=lambda: commands.Up_Button(listFrame, Scroll_Up))
+    Scroll_Down = tk.CTkButton(master=ScrollFrame, text="Down", width=10, command=lambda: commands.Down_Button(listFrame, Scroll_Down))
+    Scroll_Up.pack(side="top")
+    Scroll_Down.pack(side="bottom")
+    #Scroll_Up.configure(state="disabled")
+    #Scroll_Down.configure(state="disabled")
+
 def interface():
     UI = tk.CTk()
     UI.geometry("800x600")
     UI.title("Finance Tracker")
 
-    masterListFrame = tk.CTkFrame(master=UI)
+    ItemDisplay = tk.CTkFrame(master=UI)
+    ItemDisplay.pack(side="left")
+    masterListFrame = tk.CTkFrame(master=ItemDisplay)
     labelFrame = tk.CTkFrame(master=masterListFrame)
     Labelbox(labelFrame)
     listFrame = tk.CTkFrame(master=masterListFrame)
     listFrame.pack()
-    masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
+    masterListFrame.pack(side="left", padx=10, pady=10, fill="y")
+    ScrollBar = tk.CTkFrame(master=ItemDisplay)
+    Scroll_Bar(ScrollBar, listFrame)
+    ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
     
     EntryBox(UI, listFrame)
     

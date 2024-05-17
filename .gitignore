@@ -3,6 +3,7 @@
 
 # Ignore Python cache directories
 __pycache__/
+src/components/__pycache__/
 
 # Ignore environment-specific settings
 .env
@@ -11,3 +12,4 @@ __pycache__/
 .vscode/
 .idea/
 *.sublime-*
+/src/components/__pycache__

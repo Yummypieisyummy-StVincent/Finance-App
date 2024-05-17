@@ -14,6 +14,7 @@ def populateListbox(listFrame):
     global startIndex
     start = startIndex
     for entry in listFrame.winfo_children():
+        print(entry)
         entry.destroy()
     for entry in range(start, len(listOfEntries), start+1):
         itemFrame = tk.CTkFrame(master=listFrame)
@@ -67,6 +68,10 @@ def Set_Start():
     global startIndex
     startIndex = 0
 
+def Overwrite_Button():
+    global listOfEntries
+    listOfEntries.clear() #Possible Remove
+    listOfEntries = dataStorage.load()
 
 def Open_Button(UI, listFrame):  
     global listOfEntries, startIndex
@@ -77,28 +82,27 @@ def Open_Button(UI, listFrame):
         Popup.title("Warning")
         Popup.geometry("500x100")
         tk.CTkLabel(Popup, text="Are you sure you want to open a new file? Current data will be overwritten!").pack()
-        tk.CTkButton(Popup, text="Yes", command=lambda: [dataStorage.load(), Popup.destroy(), Set_Start()]).pack()
+        tk.CTkButton(Popup, text="Yes", command=lambda: [Overwrite_Button(), Popup.destroy(), Set_Start()]).pack()
         tk.CTkButton(Popup, text="No", command=Popup.destroy).pack()
     else:
         listOfEntries = dataStorage.load()
-    print("Open_Button list created")
 
     populateListbox(listFrame)
 
 def Down_Button(listFrame, button):
     global startIndex
     if(startIndex < len(listOfEntries)):
-        button.config(state=ACTIVE)
+        button.configure(state=ACTIVE)
         startIndex = startIndex + 1
-    if(startIndex == len(listOfEntries)):
-        button.config(state=DISABLED)
+    #if(startIndex == len(listOfEntries)):
+    #    button.configure(state=DISABLED)
     populateListbox(listFrame)
 
 def Up_Button(listFrame, button):
     global startIndex
     if(startIndex > 0):
-        button.config(state=ACTIVE)
+        button.configure(state=ACTIVE)
         startIndex = startIndex - 1
-    if(startIndex == 0):
-        button.config(state=DISABLED)
+    #if(startIndex == 0):
+    #    button.configure(state=DISABLED)
     populateListbox(listFrame)
