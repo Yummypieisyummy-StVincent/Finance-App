@@ -30,14 +30,25 @@ def EntryBox(masterFrame, listFrame):
 
 def Labelbox(labelFrame):
 
-    jobIndex = tk.CTkLabel(master=labelFrame, text="Job", width=100)
+    jobIndexFrame = tk.CTkFrame(master=labelFrame)
+    dateIndexFrame = tk.CTkFrame(master=labelFrame)
+    reasonIndexFrame = tk.CTkFrame(master=labelFrame)
+    transactionIndexFrame = tk.CTkFrame(master=labelFrame)
+
+    jobIndex = tk.CTkLabel(master=jobIndexFrame, text="Job", width=100)
     jobIndex.pack(side="left", padx=10, fill="x")
-    dateIndex = tk.CTkLabel(master=labelFrame, text="Date", width=50)
+    dateIndex = tk.CTkLabel(master=dateIndexFrame, text="Date", width=65)
     dateIndex.pack(side="left", padx=10, fill="x")
-    reasonIndex = tk.CTkLabel(master=labelFrame, text="Reason", width=100)
+    reasonIndex = tk.CTkLabel(master=reasonIndexFrame, text="Reason", width=200)
     reasonIndex.pack(side="left", padx=10, fill="x")
-    transactionIndex = tk.CTkLabel(master=labelFrame, text="Transaction", width=50)
-    transactionIndex.pack(side="left", padx=10, fill="x")
+    transactionIndex = tk.CTkLabel(master=transactionIndexFrame, text="Transaction")
+    transactionIndex.pack(side="right", padx=10, fill="x")
+
+    jobIndexFrame.pack(side="left")
+    dateIndexFrame.pack(side="left")
+    reasonIndexFrame.pack(side="left")
+    transactionIndexFrame.pack(side="left")
+
     labelFrame.pack()
 
 def Scroll_Bar(ScrollFrame, listFrame):
@@ -55,12 +66,13 @@ def interface():
 
     ItemDisplay = tk.CTkFrame(master=UI)
     ItemDisplay.pack(side="left")
-    masterListFrame = tk.CTkFrame(master=ItemDisplay)
+    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=500)
+    masterListFrame.pack_propagate(False)
     labelFrame = tk.CTkFrame(master=masterListFrame)
     Labelbox(labelFrame)
     listFrame = tk.CTkFrame(master=masterListFrame)
     listFrame.pack()
-    masterListFrame.pack(side="left", padx=10, pady=10, fill="y")
+    masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
     ScrollBar = tk.CTkFrame(master=ItemDisplay)
     Scroll_Bar(ScrollBar, listFrame)
     ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
