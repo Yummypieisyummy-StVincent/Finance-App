@@ -10,31 +10,22 @@ from customtkinter import CTkToplevel
 listOfEntries = []
 startIndex = 0 #This specifies the start index of the list - used when scrolling through large lists of entries
 
-def populateListbox(listFrame):
+def populateListbox(listsArray):
     global startIndex
     start = startIndex
-    for entry in listFrame.winfo_children():
-        print(entry)
-        entry.destroy()
-    jobFrame = tk.CTkFrame(master=listFrame)
-    dateFrame = tk.CTkFrame(master=listFrame)
-    reasonFrame = tk.CTkFrame(master=listFrame)
-    transactionFrame = tk.CTkFrame(master=listFrame)
-    for entry in range(start, len(listOfEntries), start+1):
-        #itemFrame = tk.CTkFrame(master=listFrame)
-        job = tk.CTkLabel(master=jobFrame, text=listOfEntries[entry].job, width=50)
-        date = tk.CTkLabel(master=dateFrame, text=listOfEntries[entry].date, width=50)
-        reason = tk.CTkLabel(master=reasonFrame, text=listOfEntries[entry].description, width=50)
-        transaction = tk.CTkLabel(master=transactionFrame, text=listOfEntries[entry].amount, width=50)
+    for list in listsArray:
+        for entry in list.winfo_children():
+            print(entry)
+            entry.destroy()
+    for entry in range(start, len(listOfEntries)):
+        job = tk.CTkLabel(master=listsArray[0], text=listOfEntries[entry].job)
+        date = tk.CTkLabel(master=listsArray[1], text=listOfEntries[entry].date)
+        reason = tk.CTkLabel(master=listsArray[2], text=listOfEntries[entry].description)
+        transaction = tk.CTkLabel(master=listsArray[3], text=listOfEntries[entry].amount)
         job.pack(padx=10)
         date.pack(padx=10)
         reason.pack(padx=10)
         transaction.pack(padx=10)
-        #itemFrame.pack()
-    jobFrame.pack(side="left")
-    dateFrame.pack(side="left")
-    reasonFrame.pack(side="left")
-    transactionFrame.pack(side="left")
 
 def Save_Button():
     dataStorage.save(listOfEntries)
@@ -81,7 +72,7 @@ def Overwrite_Button():
     listOfEntries.clear() #Possible Remove
     listOfEntries = dataStorage.load()
 
-def Open_Button(UI, listFrame):  
+def Open_Button(UI, listsArray):  
     global listOfEntries, startIndex
 
     if(len(listOfEntries) > 0):
@@ -95,22 +86,34 @@ def Open_Button(UI, listFrame):
     else:
         listOfEntries = dataStorage.load()
 
-    populateListbox(listFrame)
+    populateListbox(listsArray)
+#def disableCheckDown(button):
+#    if(startIndex == len(listOfEntries)):
+#        button.configure(state=DISABLED)
+#    else:
+#        button.configure(state=NORMAL)
+#
+#def disableCheckUp(button):
+#    if(startIndex == 0):
+#        button.configure(state=DISABLED)
+#    else:
+#        button.configure(state=NORMAL)
+
 
 def Down_Button(listFrame, button):
     global startIndex
     if(startIndex < len(listOfEntries)):
-        button.configure(state=ACTIVE)
-        startIndex = startIndex + 1
-    #if(startIndex == len(listOfEntries)):
-    #    button.configure(state=DISABLED)
+#        button.configure(state=NORMAL)
+        startIndex += 1
+#    disableCheckDown(button)
+#    disableCheckUp(button)
     populateListbox(listFrame)
 
 def Up_Button(listFrame, button):
     global startIndex
     if(startIndex > 0):
-        button.configure(state=ACTIVE)
-        startIndex = startIndex - 1
-    #if(startIndex == 0):
-    #    button.configure(state=DISABLED)
+#        button.configure(state=NORMAL)
+        startIndex -= 1
+#    disableCheckDown(button)
+#    disableCheckUp(button)
     populateListbox(listFrame)
