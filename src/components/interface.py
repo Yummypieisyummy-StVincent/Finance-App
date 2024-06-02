@@ -9,7 +9,7 @@ tk.set_default_color_theme("blue")
 
 listsArray = []
 
-def EntryBox(masterFrame, listsArray):
+def Entry_Box(masterFrame, listsArray):
     entryFrame = tk.CTkFrame(master=masterFrame)
 
     JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job")
@@ -30,36 +30,38 @@ def EntryBox(masterFrame, listsArray):
     entryFrame.pack(side="right", padx=10, pady=10)
 
 
-def Columns(parentFrame):
+def Columns_(parentFrame):
 
     global listsArray
 
-    JobColumn = tk.CTkFrame(master=parentFrame, width=20)
+    JobColumn = tk.CTkFrame(master=parentFrame)
+    DateColumn = tk.CTkFrame(master=parentFrame)
+    ReasonColumn = tk.CTkFrame(master=parentFrame)
+    TransactionColumn = tk.CTkFrame(master=parentFrame)
     JobColumn.pack(side="left", fill="y")
-    DateColumn = tk.CTkFrame(master=parentFrame, width=20)
     DateColumn.pack(side="left", fill="y")
-    ReasonColumn = tk.CTkFrame(master=parentFrame, width=20)
     ReasonColumn.pack(side="left", fill="y")
-    TransactionColumn = tk.CTkFrame(master=parentFrame, width=20)
     TransactionColumn.pack(side="left", fill="y")
 
     JobLabelFrame = tk.CTkFrame(master=JobColumn)
-    JobLabelFrame.pack()
+
     DateLabelFrame = tk.CTkFrame(master=DateColumn)
-    DateLabelFrame.pack()
+
     ReasonLabelFrame = tk.CTkFrame(master=ReasonColumn)
-    ReasonLabelFrame.pack()
     TransactionLabelFrame = tk.CTkFrame(master=TransactionColumn)
+    JobLabelFrame.pack()
+    DateLabelFrame.pack()
+    ReasonLabelFrame.pack()
     TransactionLabelFrame.pack()
 
     JobLabel = tk.CTkLabel(master=JobLabelFrame, text="Job")
-    JobLabel.pack()
+    JobLabel.pack(padx=10, pady=10)
     DateLabel = tk.CTkLabel(master=DateLabelFrame, text="Date")
-    DateLabel.pack()
+    DateLabel.pack(padx=10, pady=10)
     ReasonLabel = tk.CTkLabel(master=ReasonLabelFrame, text="Reason")
-    ReasonLabel.pack()
+    ReasonLabel.pack(padx=10, pady=10)
     TransactionLabel = tk.CTkLabel(master=TransactionLabelFrame, text="Transaction")
-    TransactionLabel.pack()
+    TransactionLabel.pack(padx=10, pady=10)
 
     JobListFrame = tk.CTkFrame(master=JobColumn)
     JobListFrame.pack()
@@ -91,27 +93,25 @@ def interface():
 
     ItemDisplay = tk.CTkFrame(master=UI)
     ItemDisplay.pack(side="left")
-    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=500)
+    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550)
     masterListFrame.pack_propagate(False)
-    listsArray = Columns(masterListFrame)
-    #labelFrame = tk.CTkFrame(master=masterListFrame)
-    #Labelbox(labelFrame)
-    #listFrame = tk.CTkFrame(master=masterListFrame)
-    #listFrame.pack()
+    listsArray = Columns_(masterListFrame)
     masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
     ScrollBar = tk.CTkFrame(master=ItemDisplay)
     Scroll_Bar(ScrollBar, listsArray)
     ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
     
-    EntryBox(UI, listsArray)
+    Entry_Box(UI, listsArray)
     
 
-    
+    FileFrame = tk.CTkFrame(master=UI)
 
-    OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button(UI, listsArray))
-    OpenButton.place(relx=0.5, rely=0.6, anchor="center")
+    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray))
+    OpenButton.pack()
 
-    SaveButton = tk.CTkButton(UI, text="Save", command=lambda: commands.Save_Button())
-    SaveButton.place(relx=0.5, rely=0.65, anchor="center")
+    SaveButton = tk.CTkButton(master=FileFrame, text="Save", command=lambda: commands.Save_Button())
+    SaveButton.pack()
+
+    FileFrame.pack(padx=10, pady=10)
     
     return UI
