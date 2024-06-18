@@ -91,8 +91,11 @@ def interface():
     UI.geometry("800x600")
     UI.title("Finance Tracker")
 
-    ItemDisplay = tk.CTkFrame(master=UI)
-    ItemDisplay.pack(side="left")
+    FileFrame = tk.CTkFrame(master=UI)
+    FileFrame.pack(padx=10, pady=10, side="left")
+
+    ItemDisplay = tk.CTkFrame(master=FileFrame)
+    ItemDisplay.pack(side="top")
     masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550)
     masterListFrame.pack_propagate(False)
     listsArray = Columns_(masterListFrame)
@@ -104,14 +107,14 @@ def interface():
     Entry_Box(UI, listsArray)
     
 
-    FileFrame = tk.CTkFrame(master=UI)
+    
 
     OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray))
-    OpenButton.pack()
+    OpenButton.pack(side="bottom")
 
     SaveButton = tk.CTkButton(master=FileFrame, text="Save", command=lambda: commands.Save_Button())
-    SaveButton.pack()
+    SaveButton.pack(side="bottom")
 
-    FileFrame.pack(padx=10, pady=10)
+    
     
     return UI
