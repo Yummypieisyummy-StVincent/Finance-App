@@ -9,15 +9,25 @@ from customtkinter import CTkToplevel
 
 listOfEntries = []
 startIndex = 0 #This specifies the start index of the list - used when scrolling through large lists of entries
+endIndex = 16
+totalIncome = 0
 
-def populateListbox(listsArray):
-    global startIndex
+def calculateTotalIncome(incomeLabel):
+    global totalIncome
+    totalIncome = 0
+    for entry in listOfEntries:
+        totalIncome += entry.amount
+    incomeLabel.configure(text="Total income: " + str(totalIncome))
+    return totalIncome
+
+def populateListbox(listsArray, incomeLabel):
+    global startIndex, endIndex
     start = startIndex
+    end = endIndex
     for list in listsArray:
         for entry in list.winfo_children():
-            print(entry)
             entry.destroy()
-    for entry in range(start, len(listOfEntries)):
+    for entry in range(start, end):
         job = tk.CTkLabel(master=listsArray[0], text=listOfEntries[entry].job)
         date = tk.CTkLabel(master=listsArray[1], text=listOfEntries[entry].date)
         reason = tk.CTkLabel(master=listsArray[2], text=listOfEntries[entry].description)
@@ -26,6 +36,7 @@ def populateListbox(listsArray):
         date.pack(padx=10)
         reason.pack(padx=10)
         transaction.pack(padx=10)
+    calculateTotalIncome(incomeLabel)
 
 def Save_Button():
     dataStorage.save(listOfEntries)
@@ -72,7 +83,7 @@ def Overwrite_Button():
     listOfEntries.clear() #Possible Remove
     listOfEntries = dataStorage.load()
 
-def Open_Button(UI, listsArray):  
+def Open_Button(UI, listsArray, incomeLabel):  
     global listOfEntries, startIndex
 
     if(len(listOfEntries) > 0):
@@ -86,7 +97,7 @@ def Open_Button(UI, listsArray):
     else:
         listOfEntries = dataStorage.load()
 
-    populateListbox(listsArray)
+    populateListbox(listsArray, incomeLabel)
 #def disableCheckDown(button):
 #    if(startIndex == len(listOfEntries)):
 #        button.configure(state=DISABLED)
@@ -99,21 +110,26 @@ def Open_Button(UI, listsArray):
 #    else:
 #        button.configure(state=NORMAL)
 
-
-def Down_Button(listFrame, button):
-    global startIndex
-    if(startIndex < len(listOfEntries)):
-#        button.configure(state=NORMAL)
+def Down_Button(listFrame, incomeLabel):
+    global startIndex, endIndex
+    if((startIndex < len(listOfEntries) - 16)):
         startIndex += 1
+    if(endIndex < len(listOfEntries)):
+        endIndex += 1
 #    disableCheckDown(button)
 #    disableCheckUp(button)
-    populateListbox(listFrame)
+    populateListbox(listFrame, incomeLabel)
 
-def Up_Button(listFrame, button):
-    global startIndex
+def Up_Button(listFrame, incomeLabel):
+    global startIndex, endIndex
+    start = startIndex
+    end = endIndex
     if(startIndex > 0):
-#        button.configure(state=NORMAL)
         startIndex -= 1
-#    disableCheckDown(button)
-#    disableCheckUp(button)
-    populateListbox(listFrame)
+    if(endIndex > 16):
+        endIndex -= 1
+    if((startIndex != start) and (endIndex != end)):
+        print("Test 1")
+        populateListbox(listFrame, incomeLabel)
+    if((startIndex == start) and (endIndex == end)):
+        print("Test 2")

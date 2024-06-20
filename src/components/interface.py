@@ -9,7 +9,7 @@ tk.set_default_color_theme("blue")
 
 listsArray = []
 
-def Entry_Box(masterFrame, listsArray):
+def Entry_Box(masterFrame, listsArray, incomeLabel):
     entryFrame = tk.CTkFrame(master=masterFrame)
 
     JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job")
@@ -24,10 +24,10 @@ def Entry_Box(masterFrame, listsArray):
     DateBox = DateEntry(master=entryFrame)
     DateBox.pack(anchor="center")
 
-    AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox), commands.populateListbox(listsArray)])
+    AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox), commands.populateListbox(listsArray, incomeLabel)])
     AddButton.pack(anchor="center")
 
-    entryFrame.pack(side="right", padx=10, pady=10)
+    entryFrame.pack(side="right", padx=100, pady=10)
 
 
 def Columns_(parentFrame):
@@ -49,10 +49,10 @@ def Columns_(parentFrame):
 
     ReasonLabelFrame = tk.CTkFrame(master=ReasonColumn)
     TransactionLabelFrame = tk.CTkFrame(master=TransactionColumn)
-    JobLabelFrame.pack()
-    DateLabelFrame.pack()
-    ReasonLabelFrame.pack()
-    TransactionLabelFrame.pack()
+    JobLabelFrame.pack(fill="x")
+    DateLabelFrame.pack(fill="x")
+    ReasonLabelFrame.pack(fill="x")
+    TransactionLabelFrame.pack(fill="x")
 
     JobLabel = tk.CTkLabel(master=JobLabelFrame, text="Job")
     JobLabel.pack(padx=10, pady=10)
@@ -78,43 +78,41 @@ def Columns_(parentFrame):
     listsArray.append(TransactionListFrame)
     return listsArray
 
-def Scroll_Bar(ScrollFrame, listsArray):
-    Scroll_Up = tk.CTkButton(master=ScrollFrame, text="Up", width=10, command=lambda: commands.Up_Button(listsArray, Scroll_Up))
-    Scroll_Down = tk.CTkButton(master=ScrollFrame, text="Down", width=10, command=lambda: commands.Down_Button(listsArray, Scroll_Down))
-    Scroll_Up.pack(side="top")
+def Scroll_Bar(ScrollFrame, listsArray, incomeLabel):
+    Scroll_Up = tk.CTkButton(master=ScrollFrame, text="Up", width=10, command=lambda: commands.Up_Button(listsArray, incomeLabel))
+    Scroll_Down = tk.CTkButton(master=ScrollFrame, text="Down", width=10, command=lambda: commands.Down_Button(listsArray, incomeLabel))
+    Scroll_Up.pack(side="top", fill="x")
     Scroll_Down.pack(side="bottom")
     #Scroll_Up.configure(state="disabled")
     #Scroll_Down.configure(state="disabled")
 
 def interface():
     UI = tk.CTk()
-    UI.geometry("800x600")
+    UI.geometry("1200x600")
     UI.title("Finance Tracker")
 
     FileFrame = tk.CTkFrame(master=UI)
     FileFrame.pack(padx=10, pady=10, side="left")
 
+    incomeLabel = tk.CTkLabel(master=UI, text="Total Income: " + str(commands.totalIncome))
+    incomeLabel.pack(side="right")
+
     ItemDisplay = tk.CTkFrame(master=FileFrame)
     ItemDisplay.pack(side="top")
-    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550)
+    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=490)
     masterListFrame.pack_propagate(False)
     listsArray = Columns_(masterListFrame)
     masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
     ScrollBar = tk.CTkFrame(master=ItemDisplay)
-    Scroll_Bar(ScrollBar, listsArray)
+    Scroll_Bar(ScrollBar, listsArray, incomeLabel)
     ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
-    
-    Entry_Box(UI, listsArray)
-    
 
-    
+    Entry_Box(UI, listsArray, incomeLabel)    
 
-    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray))
+    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray, incomeLabel))
     OpenButton.pack(side="bottom")
 
     SaveButton = tk.CTkButton(master=FileFrame, text="Save", command=lambda: commands.Save_Button())
     SaveButton.pack(side="bottom")
 
-    
-    
     return UI
