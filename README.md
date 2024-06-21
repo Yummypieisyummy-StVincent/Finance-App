@@ -1,3 +1,3 @@
-Desktop application for keeping track of profits and expenses.
+Desktop application for documenting profits and expenses.
 
-Written by Ryan Bodner
+Copyrights © 2024 Ryan Bodner

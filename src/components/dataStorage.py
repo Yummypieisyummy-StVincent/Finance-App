@@ -1,3 +1,5 @@
+#This file manages the data storage and load of the application
+
 from tkinter import filedialog
 import json
 import itemClass

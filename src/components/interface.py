@@ -1,3 +1,5 @@
+#This file creates the components of the window and calls their functionality from commands.py
+
 import customtkinter as tk
 import commands
 from tkcalendar import DateEntry
@@ -5,43 +7,112 @@ from tkcalendar import DateEntry
 tk.set_appearance_mode("SystemDefault")
 tk.set_default_color_theme("blue")
 
-def centerWindow(window):
-    window.update_idletasks()
-    width = window.winfo_width()
-    height = window.winfo_height()
-    x = (window.winfo_screenwidth() // 2) - (width // 2)
-    y = (window.winfo_screenheight() // 2) - (height // 2)
-    window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+listsArray = []
 
-def EntryBox(masterFrame):
-    JobBox = tk.CTkEntry(master=masterFrame, placeholder_text="Job")
-    JobBox.place(relx=0.5, rely=0.3, anchor="center")
+def Entry_Box(masterFrame, listsArray, incomeLabel):
+    entryFrame = tk.CTkFrame(master=masterFrame)
 
-    ReasonBox = tk.CTkEntry(master=masterFrame, placeholder_text="Reason of transaction")
-    ReasonBox.place(relx=0.5, rely=0.35, anchor="center")
+    JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job")
+    JobBox.pack(anchor="center")
 
-    TransactionBox = tk.CTkEntry(master=masterFrame, placeholder_text="Amount")
-    TransactionBox.place(relx=0.5, rely=0.4, anchor="center")
+    ReasonBox = tk.CTkEntry(master=entryFrame, placeholder_text="Reason of transaction")
+    ReasonBox.pack(anchor="center")
 
-    DateBox = DateEntry(master=masterFrame)
-    DateBox.place(relx=0.5, rely=0.45, anchor="center")
+    TransactionBox = tk.CTkEntry(master=entryFrame, placeholder_text="Amount")
+    TransactionBox.pack(anchor="center")
 
-    AddButton = tk.CTkButton(master=masterFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox)])
-    AddButton.place(relx=0.5, rely=0.5, anchor="center")
+    DateBox = DateEntry(master=entryFrame)
+    DateBox.pack(anchor="center")
+
+    AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox), commands.populateListbox(listsArray, incomeLabel)])
+    AddButton.pack(anchor="center")
+
+    entryFrame.pack(side="right", padx=100, pady=10)
+
+
+def Columns_(parentFrame):
+
+    global listsArray
+
+    JobColumn = tk.CTkFrame(master=parentFrame)
+    DateColumn = tk.CTkFrame(master=parentFrame)
+    ReasonColumn = tk.CTkFrame(master=parentFrame)
+    TransactionColumn = tk.CTkFrame(master=parentFrame)
+    JobColumn.pack(side="left", fill="y")
+    DateColumn.pack(side="left", fill="y")
+    ReasonColumn.pack(side="left", fill="y")
+    TransactionColumn.pack(side="left", fill="y")
+
+    JobLabelFrame = tk.CTkFrame(master=JobColumn)
+
+    DateLabelFrame = tk.CTkFrame(master=DateColumn)
+
+    ReasonLabelFrame = tk.CTkFrame(master=ReasonColumn)
+    TransactionLabelFrame = tk.CTkFrame(master=TransactionColumn)
+    JobLabelFrame.pack(fill="x")
+    DateLabelFrame.pack(fill="x")
+    ReasonLabelFrame.pack(fill="x")
+    TransactionLabelFrame.pack(fill="x")
+
+    JobLabel = tk.CTkLabel(master=JobLabelFrame, text="Job")
+    JobLabel.pack(padx=10, pady=10)
+    DateLabel = tk.CTkLabel(master=DateLabelFrame, text="Date")
+    DateLabel.pack(padx=10, pady=10)
+    ReasonLabel = tk.CTkLabel(master=ReasonLabelFrame, text="Reason")
+    ReasonLabel.pack(padx=10, pady=10)
+    TransactionLabel = tk.CTkLabel(master=TransactionLabelFrame, text="Transaction")
+    TransactionLabel.pack(padx=10, pady=10)
+
+    JobListFrame = tk.CTkFrame(master=JobColumn)
+    JobListFrame.pack()
+    DateListFrame = tk.CTkFrame(master=DateColumn)
+    DateListFrame.pack()
+    ReasonListFrame = tk.CTkFrame(master=ReasonColumn)
+    ReasonListFrame.pack()
+    TransactionListFrame = tk.CTkFrame(master=TransactionColumn)
+    TransactionListFrame.pack()
+
+    listsArray.append(JobListFrame)
+    listsArray.append(DateListFrame)
+    listsArray.append(ReasonListFrame)
+    listsArray.append(TransactionListFrame)
+    return listsArray
+
+def Scroll_Bar(ScrollFrame, listsArray, incomeLabel):
+    Scroll_Up = tk.CTkButton(master=ScrollFrame, text="Up", width=10, command=lambda: commands.Up_Button(listsArray, incomeLabel))
+    Scroll_Down = tk.CTkButton(master=ScrollFrame, text="Down", width=10, command=lambda: commands.Down_Button(listsArray, incomeLabel))
+    Scroll_Up.pack(side="top", fill="x")
+    Scroll_Down.pack(side="bottom")
+    #Scroll_Up.configure(state="disabled")
+    #Scroll_Down.configure(state="disabled")
 
 def interface():
     UI = tk.CTk()
-    UI.geometry("800x600")
-    #centerWindow(UI)
+    UI.geometry("1200x600")
     UI.title("Finance Tracker")
 
-    EntryBox(UI)
-    
+    FileFrame = tk.CTkFrame(master=UI)
+    FileFrame.pack(padx=10, pady=10, side="left")
 
-    OpenButton = tk.CTkButton(UI, text="Open", command=lambda: commands.Open_Button(UI))
-    OpenButton.place(relx=0.5, rely=0.6, anchor="center")
+    incomeLabel = tk.CTkLabel(master=UI, text="Total Income: " + str(commands.totalIncome))
+    incomeLabel.pack(side="right")
 
-    SaveButton = tk.CTkButton(UI, text="Save", command=lambda: commands.Save_Button())
-    SaveButton.place(relx=0.5, rely=0.65, anchor="center")
-    
+    ItemDisplay = tk.CTkFrame(master=FileFrame)
+    ItemDisplay.pack(side="top")
+    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=490)
+    masterListFrame.pack_propagate(False)
+    listsArray = Columns_(masterListFrame)
+    masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
+    ScrollBar = tk.CTkFrame(master=ItemDisplay)
+    Scroll_Bar(ScrollBar, listsArray, incomeLabel)
+    ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
+
+    Entry_Box(UI, listsArray, incomeLabel)    
+
+    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray, incomeLabel))
+    OpenButton.pack(side="bottom")
+
+    SaveButton = tk.CTkButton(master=FileFrame, text="Save", command=lambda: commands.Save_Button())
+    SaveButton.pack(side="bottom")
+
     return UI
