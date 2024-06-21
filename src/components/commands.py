@@ -112,13 +112,17 @@ def Open_Button(UI, listsArray, incomeLabel):
 
 def Down_Button(listFrame, incomeLabel):
     global startIndex, endIndex
+    start = startIndex
+    end = endIndex
     if((startIndex < len(listOfEntries) - 16)):
         startIndex += 1
     if(endIndex < len(listOfEntries)):
         endIndex += 1
-#    disableCheckDown(button)
-#    disableCheckUp(button)
-    populateListbox(listFrame, incomeLabel)
+    if((startIndex != start) and (endIndex != end)):
+        print("Test 1.Down")
+        populateListbox(listFrame, incomeLabel)
+    if((startIndex == start) and (endIndex == end)):
+        print("Test 2.Down")
 
 def Up_Button(listFrame, incomeLabel):
     global startIndex, endIndex
@@ -129,7 +133,7 @@ def Up_Button(listFrame, incomeLabel):
     if(endIndex > 16):
         endIndex -= 1
     if((startIndex != start) and (endIndex != end)):
-        print("Test 1")
+        print("Test 1.Up")
         populateListbox(listFrame, incomeLabel)
     if((startIndex == start) and (endIndex == end)):
-        print("Test 2")
+        print("Test 2.Up")
