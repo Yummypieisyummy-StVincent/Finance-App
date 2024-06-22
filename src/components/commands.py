@@ -10,17 +10,25 @@ from customtkinter import CTkToplevel
 listOfEntries = []
 startIndex = 0 #This specifies the start index of the list - used when scrolling through large lists of entries
 endIndex = 16
-totalIncome = 0
+totalMoney = 0 # [0]
+totalExpenses = 0 # [1]
+totalIncome = 0 # [2]
 
-def calculateTotalIncome(incomeLabel):
-    global totalIncome
-    totalIncome = 0
+def calculate(statsFrameArray):
+    global totalMoney, totalExpenses, totalIncome
+    totalMoney = totalIncome = totalExpenses = 0
     for entry in listOfEntries:
-        totalIncome += entry.amount
-    incomeLabel.configure(text="Total income: " + str(totalIncome))
-    return totalIncome
+        totalMoney += entry.amount
+        if(entry.amount < 0):
+            totalExpenses += entry.amount
+        if(entry.amount > 0):
+            totalIncome += entry.amount
+    statsFrameArray[0].configure(text="Total income: $" + str(totalMoney))
+    statsFrameArray[1].configure(text="Total expenses: $" + str(totalExpenses))
+    statsFrameArray[2].configure(text="Total income: $" + str(totalIncome))
+    #return totalMoney
 
-def populateListbox(listsArray, incomeLabel):
+def populateListbox(listsArray, statsFrameArray):
     global startIndex, endIndex
     start = startIndex
     end = endIndex
@@ -36,7 +44,7 @@ def populateListbox(listsArray, incomeLabel):
         date.pack(padx=10)
         reason.pack(padx=10)
         transaction.pack(padx=10)
-    calculateTotalIncome(incomeLabel)
+    calculate(statsFrameArray)
 
 def Save_Button():
     dataStorage.save(listOfEntries)
@@ -83,7 +91,7 @@ def Overwrite_Button():
     listOfEntries.clear() #Possible Remove
     listOfEntries = dataStorage.load()
 
-def Open_Button(UI, listsArray, incomeLabel):  
+def Open_Button(UI, listsArray, statsFrameArray):  
     global listOfEntries, startIndex
 
     if(len(listOfEntries) > 0):
@@ -97,7 +105,7 @@ def Open_Button(UI, listsArray, incomeLabel):
     else:
         listOfEntries = dataStorage.load()
 
-    populateListbox(listsArray, incomeLabel)
+    populateListbox(listsArray, statsFrameArray)
 #def disableCheckDown(button):
 #    if(startIndex == len(listOfEntries)):
 #        button.configure(state=DISABLED)
@@ -110,7 +118,7 @@ def Open_Button(UI, listsArray, incomeLabel):
 #    else:
 #        button.configure(state=NORMAL)
 
-def Down_Button(listFrame, incomeLabel):
+def Down_Button(listFrame, statsFrameArray):
     global startIndex, endIndex
     start = startIndex
     end = endIndex
@@ -120,11 +128,11 @@ def Down_Button(listFrame, incomeLabel):
         endIndex += 1
     if((startIndex != start) and (endIndex != end)):
         print("Test 1.Down")
-        populateListbox(listFrame, incomeLabel)
+        populateListbox(listFrame, statsFrameArray)
     if((startIndex == start) and (endIndex == end)):
         print("Test 2.Down")
 
-def Up_Button(listFrame, incomeLabel):
+def Up_Button(listFrame, statsFrameArray):
     global startIndex, endIndex
     start = startIndex
     end = endIndex
@@ -134,6 +142,6 @@ def Up_Button(listFrame, incomeLabel):
         endIndex -= 1
     if((startIndex != start) and (endIndex != end)):
         print("Test 1.Up")
-        populateListbox(listFrame, incomeLabel)
+        populateListbox(listFrame, statsFrameArray)
     if((startIndex == start) and (endIndex == end)):
         print("Test 2.Up")

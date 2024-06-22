@@ -9,7 +9,7 @@ tk.set_default_color_theme("blue")
 
 listsArray = []
 
-def Entry_Box(masterFrame, listsArray, incomeLabel):
+def Entry_Box(masterFrame, listsArray, statsFrameArray):
     entryFrame = tk.CTkFrame(master=masterFrame)
 
     JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job")
@@ -24,10 +24,10 @@ def Entry_Box(masterFrame, listsArray, incomeLabel):
     DateBox = DateEntry(master=entryFrame)
     DateBox.pack(anchor="center")
 
-    AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox), commands.populateListbox(listsArray, incomeLabel)])
+    AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox), commands.populateListbox(listsArray, statsFrameArray)])
     AddButton.pack(anchor="center")
 
-    entryFrame.pack(side="right", padx=100, pady=10)
+    entryFrame.pack(padx=10, pady=10)
 
 
 def Columns_(parentFrame):
@@ -78,38 +78,60 @@ def Columns_(parentFrame):
     listsArray.append(TransactionListFrame)
     return listsArray
 
-def Scroll_Bar(ScrollFrame, listsArray, incomeLabel):
-    Scroll_Up = tk.CTkButton(master=ScrollFrame, text="Up", width=10, command=lambda: commands.Up_Button(listsArray, incomeLabel))
-    Scroll_Down = tk.CTkButton(master=ScrollFrame, text="Down", width=10, command=lambda: commands.Down_Button(listsArray, incomeLabel))
+def Scroll_Bar(ScrollFrame, listsArray, statsFrameArray):
+    Scroll_Up = tk.CTkButton(master=ScrollFrame, text="Up", width=10, command=lambda: commands.Up_Button(listsArray, statsFrameArray))
+    Scroll_Down = tk.CTkButton(master=ScrollFrame, text="Down", width=10, command=lambda: commands.Down_Button(listsArray, statsFrameArray))
     Scroll_Up.pack(side="top", fill="x")
     Scroll_Down.pack(side="bottom")
     #Scroll_Up.configure(state="disabled")
     #Scroll_Down.configure(state="disabled")
+
+def Stats_Box(masterFrame):
+    statsArray = [tk.CTkLabel, tk.CTkLabel, tk.CTkLabel]
+    statsFrame = tk.CTkFrame(master=masterFrame)
+
+    statsArray[0] = totalLabel = tk.CTkLabel(master=statsFrame, text="Total: $" + str(commands.totalMoney))
+    statsArray[1] = expensesLabel = tk.CTkLabel(master=statsFrame, text="Total Expenses: -$" + str(commands.totalExpenses))
+    statsArray[2] = incomeLabel = tk.CTkLabel(master=statsFrame, text="Total Income: +$" + str(commands.totalIncome))
+
+
+    totalLabel.pack()
+    expensesLabel.pack()
+    incomeLabel.pack()
+    statsFrame.pack(padx=10, pady=10)
+    return statsArray
 
 def interface():
     UI = tk.CTk()
     UI.geometry("1200x600")
     UI.title("Finance Tracker")
 
-    FileFrame = tk.CTkFrame(master=UI)
+    FileFrame = tk.CTkFrame(master=UI) #This is the frame containing the list, scroll bar, and open/save buttons
     FileFrame.pack(padx=10, pady=10, side="left")
 
-    incomeLabel = tk.CTkLabel(master=UI, text="Total Income: " + str(commands.totalIncome))
-    incomeLabel.pack(side="right")
+    statsFrame = tk.CTkFrame(master=UI)
 
-    ItemDisplay = tk.CTkFrame(master=FileFrame)
+    statsFrameArray = Stats_Box(statsFrame)
+
+    ItemDisplay = tk.CTkFrame(master=FileFrame) #This is the frame containing the list and scroll bar
     ItemDisplay.pack(side="top")
-    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=490)
+
+    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=490) #This is the frame containing the list
     masterListFrame.pack_propagate(False)
+
     listsArray = Columns_(masterListFrame)
+
     masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
+
     ScrollBar = tk.CTkFrame(master=ItemDisplay)
-    Scroll_Bar(ScrollBar, listsArray, incomeLabel)
+    Scroll_Bar(ScrollBar, listsArray, statsFrameArray)
     ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
 
-    Entry_Box(UI, listsArray, incomeLabel)    
+    Entry_Box(statsFrame, listsArray, statsFrameArray)
 
-    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray, incomeLabel))
+    statsFrame.pack(side="right", padx=10, pady=10)
+
+    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray, statsFrameArray))
     OpenButton.pack(side="bottom")
 
     SaveButton = tk.CTkButton(master=FileFrame, text="Save", command=lambda: commands.Save_Button())
