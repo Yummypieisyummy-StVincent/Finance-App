@@ -86,22 +86,11 @@ def Scroll_Bar(ScrollFrame, listsArray, statsFrameArray):
     #Scroll_Up.configure(state="disabled")
     #Scroll_Down.configure(state="disabled")
 
-def Stats_Box(masterFrame):
-    statsArray = [tk.CTkLabel, tk.CTkLabel, tk.CTkLabel, tk.CTkLabel]
-    statsFrame = tk.CTkFrame(master=masterFrame)
-
-    statsArray[0] = totalLabel = tk.CTkLabel(master=statsFrame, text="Total: $" + str(commands.totalMoney))
-    statsArray[1] = expensesLabel = tk.CTkLabel(master=statsFrame, text="Total Expenses: -$" + str(commands.totalExpenses))
-    statsArray[2] = incomeLabel = tk.CTkLabel(master=statsFrame, text="Total Income: +$" + str(commands.totalIncome))
-    statsArray[3] = incomeRatio = tk.CTkLabel(master=statsFrame, text="Expense Percentage: " + str(commands.ratio))
-
-
-    totalLabel.pack()
-    expensesLabel.pack()
-    incomeLabel.pack()
-    incomeRatio.pack()
-    statsFrame.pack(padx=10, pady=10)
-    return statsArray
+def Stats_Box(masterFrame, statsArray):
+    statsArray[0] = totalLabel = tk.CTkLabel(master=masterFrame, text="Total: $" + str(commands.totalMoney))
+    statsArray[1] = expensesLabel = tk.CTkLabel(master=masterFrame, text="Total Expenses: -$" + str(commands.totalExpenses))
+    statsArray[2] = incomeLabel = tk.CTkLabel(master=masterFrame, text="Total Income: +$" + str(commands.totalIncome))
+    statsArray[3] = incomeRatio = tk.CTkLabel(master=masterFrame, text="Expense Percentage: " + str(commands.ratio))
 
 def Sort_Button(masterFrame, listsArray, statsFrameArray):
     SortFrame = tk.CTkFrame(master=masterFrame)
@@ -115,7 +104,7 @@ def Sort_Button(masterFrame, listsArray, statsFrameArray):
     SortAmount.pack()
     SortDate.pack()
     SortJob.pack()
-    SortFrame.pack()
+    SortFrame.pack(pady=10, padx=10)
 
 def interface():
     UI = tk.CTk()
@@ -125,10 +114,10 @@ def interface():
     FileFrame = tk.CTkFrame(master=UI) #This is the frame containing the list, scroll bar, and open/save buttons
     FileFrame.pack(padx=10, pady=10, side="left")
 
-    statsFrame = tk.CTkFrame(master=UI)
-
-    statsFrameArray = Stats_Box(statsFrame) #This is the frame containing the information about the transactions
-
+    rightFrame = tk.CTkFrame(master=UI) # Contains the stats and the entry box
+    statsFrameArray = [tk.CTkLabel, tk.CTkLabel, tk.CTkLabel, tk.CTkLabel] # This is the array that holds the stats labels, PACKED LATER
+    Stats_Box(rightFrame, statsFrameArray) #This is the frame containing the information about the transactions
+    
     ItemDisplay = tk.CTkFrame(master=FileFrame) #This is the frame containing the list and scroll bar
     ItemDisplay.pack(side="top")
 
@@ -136,7 +125,10 @@ def interface():
     masterListFrame.pack_propagate(False)
 
     listsArray = Columns_(masterListFrame)
-    Sort_Button(UI, listsArray, statsFrameArray)
+    Sort_Button(rightFrame, listsArray, statsFrameArray)
+
+    for label in statsFrameArray: #This is where stats are packed
+        label.pack()
 
     masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
 
@@ -144,9 +136,9 @@ def interface():
     Scroll_Bar(ScrollBar, listsArray, statsFrameArray)
     ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
 
-    Entry_Box(statsFrame, listsArray, statsFrameArray)
+    Entry_Box(rightFrame, listsArray, statsFrameArray)
 
-    statsFrame.pack(side="right", padx=10, pady=10)
+    rightFrame.pack(side="right", padx=10, pady=10)
 
     OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray, statsFrameArray))
     OpenButton.pack(side="bottom")
