@@ -8,24 +8,46 @@ import customtkinter as tk
 from customtkinter import CTkToplevel
 
 listOfEntries = []
-startIndex = 0 #This specifies the start index of the list - used when scrolling through large lists of entries
+startIndex = 0 # This specifies the start index of the list - used when scrolling through large lists of entries
 endIndex = 16
+# StatsFrameArray = [TotalMoney, TotalExpenses, TotalIncome, Ratio]
 totalMoney = 0 # [0]
 totalExpenses = 0 # [1]
 totalIncome = 0 # [2]
+ratio = 0 # [3]
+
+def sortByJob(listsArray, statsFrameArray):
+    global listOfEntries
+    listOfEntries = sorted(listOfEntries, key=lambda x: x.job)
+    populateListbox(listsArray, statsFrameArray)
+
+def sortByDate(listsArray, statsFrameArray):
+    global listOfEntries
+    listOfEntries = sorted(listOfEntries, key=lambda x: x.date)
+    populateListbox(listsArray, statsFrameArray)
+
+def sortByAmount(listsArray, statsFrameArray):
+    global listOfEntries
+    listOfEntries = sorted(listOfEntries, key=lambda x: x.amount)
+    populateListbox(listsArray, statsFrameArray)
 
 def calculate(statsFrameArray):
     global totalMoney, totalExpenses, totalIncome
-    totalMoney = totalIncome = totalExpenses = 0
+    totalMoney = totalIncome = totalExpenses = ratio = 0.0
     for entry in listOfEntries:
-        totalMoney += entry.amount
+        totalMoney += round(entry.amount, 2)
         if(entry.amount < 0):
-            totalExpenses += entry.amount
+            totalExpenses += round(entry.amount, 2)
         if(entry.amount > 0):
-            totalIncome += entry.amount
-    statsFrameArray[0].configure(text="Total income: $" + str(totalMoney))
-    statsFrameArray[1].configure(text="Total expenses: $" + str(totalExpenses))
-    statsFrameArray[2].configure(text="Total income: $" + str(totalIncome))
+            totalIncome += round(entry.amount, 2)
+    statsFrameArray[0].configure(text="Total profit: $" + str("%.2f" %totalMoney))
+    statsFrameArray[1].configure(text="Total expenses: $" + str("%.2f" %totalExpenses))
+    statsFrameArray[2].configure(text="Total income: $" + str("%.2f" %totalIncome))
+
+    expenses = abs(round(totalExpenses, 2))
+    percentage = (expenses/totalMoney)*100.0
+    ratio = round(percentage, 2)
+    statsFrameArray[3].configure(text="Expense Percentage: " + str(ratio) + "%")
     #return totalMoney
 
 def populateListbox(listsArray, statsFrameArray):
@@ -39,7 +61,7 @@ def populateListbox(listsArray, statsFrameArray):
         job = tk.CTkLabel(master=listsArray[0], text=listOfEntries[entry].job)
         date = tk.CTkLabel(master=listsArray[1], text=listOfEntries[entry].date)
         reason = tk.CTkLabel(master=listsArray[2], text=listOfEntries[entry].description)
-        transaction = tk.CTkLabel(master=listsArray[3], text=listOfEntries[entry].amount)
+        transaction = tk.CTkLabel(master=listsArray[3], text=str("%.2f" %listOfEntries[entry].amount))
         job.pack(padx=10)
         date.pack(padx=10)
         reason.pack(padx=10)
@@ -86,9 +108,13 @@ def Set_Start():
     global startIndex
     startIndex = 0
 
+def Set_End():
+    global endIndex
+    endIndex = 16
+
 def Overwrite_Button():
     global listOfEntries
-    listOfEntries.clear() #Possible Remove
+    listOfEntries.clear() # Possible Remove
     listOfEntries = dataStorage.load()
 
 def Open_Button(UI, listsArray, statsFrameArray):  
@@ -127,10 +153,10 @@ def Down_Button(listFrame, statsFrameArray):
     if(endIndex < len(listOfEntries)):
         endIndex += 1
     if((startIndex != start) and (endIndex != end)):
-        print("Test 1.Down")
+    #    print("Test 1.Down")
         populateListbox(listFrame, statsFrameArray)
-    if((startIndex == start) and (endIndex == end)):
-        print("Test 2.Down")
+    #if((startIndex == start) and (endIndex == end)):
+    #    print("Test 2.Down")
 
 def Up_Button(listFrame, statsFrameArray):
     global startIndex, endIndex
@@ -141,7 +167,7 @@ def Up_Button(listFrame, statsFrameArray):
     if(endIndex > 16):
         endIndex -= 1
     if((startIndex != start) and (endIndex != end)):
-        print("Test 1.Up")
+    #    print("Test 1.Up")
         populateListbox(listFrame, statsFrameArray)
-    if((startIndex == start) and (endIndex == end)):
-        print("Test 2.Up")
+    #if((startIndex == start) and (endIndex == end)):
+    #    print("Test 2.Up")

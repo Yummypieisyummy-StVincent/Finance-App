@@ -7,12 +7,12 @@ from tkcalendar import DateEntry
 tk.set_appearance_mode("SystemDefault")
 tk.set_default_color_theme("blue")
 
-listsArray = []
+listsArray = [] # This is the array that holds the job, date, reason, and transaction lists
 
 def Entry_Box(masterFrame, listsArray, statsFrameArray):
     entryFrame = tk.CTkFrame(master=masterFrame)
 
-    JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job")
+    JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job / Place")
     JobBox.pack(anchor="center")
 
     ReasonBox = tk.CTkEntry(master=entryFrame, placeholder_text="Reason of transaction")
@@ -54,7 +54,7 @@ def Columns_(parentFrame):
     ReasonLabelFrame.pack(fill="x")
     TransactionLabelFrame.pack(fill="x")
 
-    JobLabel = tk.CTkLabel(master=JobLabelFrame, text="Job")
+    JobLabel = tk.CTkLabel(master=JobLabelFrame, text="Job/Place")
     JobLabel.pack(padx=10, pady=10)
     DateLabel = tk.CTkLabel(master=DateLabelFrame, text="Date")
     DateLabel.pack(padx=10, pady=10)
@@ -87,19 +87,35 @@ def Scroll_Bar(ScrollFrame, listsArray, statsFrameArray):
     #Scroll_Down.configure(state="disabled")
 
 def Stats_Box(masterFrame):
-    statsArray = [tk.CTkLabel, tk.CTkLabel, tk.CTkLabel]
+    statsArray = [tk.CTkLabel, tk.CTkLabel, tk.CTkLabel, tk.CTkLabel]
     statsFrame = tk.CTkFrame(master=masterFrame)
 
     statsArray[0] = totalLabel = tk.CTkLabel(master=statsFrame, text="Total: $" + str(commands.totalMoney))
     statsArray[1] = expensesLabel = tk.CTkLabel(master=statsFrame, text="Total Expenses: -$" + str(commands.totalExpenses))
     statsArray[2] = incomeLabel = tk.CTkLabel(master=statsFrame, text="Total Income: +$" + str(commands.totalIncome))
+    statsArray[3] = incomeRatio = tk.CTkLabel(master=statsFrame, text="Expense Percentage: " + str(commands.ratio))
 
 
     totalLabel.pack()
     expensesLabel.pack()
     incomeLabel.pack()
+    incomeRatio.pack()
     statsFrame.pack(padx=10, pady=10)
     return statsArray
+
+def Sort_Button(masterFrame, listsArray, statsFrameArray):
+    SortFrame = tk.CTkFrame(master=masterFrame)
+    SortLabel = tk.CTkLabel(master=SortFrame, text="Sort by:")
+    SortAmount = tk.CTkButton(master=SortFrame, text="Amount", command=lambda: [commands.sortByAmount(listsArray, statsFrameArray), commands.Set_Start(), commands.Set_End()])
+    SortDate = tk.CTkButton(master=SortFrame, text="Date", command=lambda: [commands.sortByDate(listsArray, statsFrameArray), commands.Set_Start(), commands.Set_End()])
+    SortJob = tk.CTkButton(master=SortFrame, text="Job", command=lambda: [commands.sortByJob(listsArray, statsFrameArray), commands.Set_Start(), commands.Set_End()])
+    
+    
+    SortLabel.pack()
+    SortAmount.pack()
+    SortDate.pack()
+    SortJob.pack()
+    SortFrame.pack()
 
 def interface():
     UI = tk.CTk()
@@ -111,7 +127,7 @@ def interface():
 
     statsFrame = tk.CTkFrame(master=UI)
 
-    statsFrameArray = Stats_Box(statsFrame)
+    statsFrameArray = Stats_Box(statsFrame) #This is the frame containing the information about the transactions
 
     ItemDisplay = tk.CTkFrame(master=FileFrame) #This is the frame containing the list and scroll bar
     ItemDisplay.pack(side="top")
@@ -120,6 +136,7 @@ def interface():
     masterListFrame.pack_propagate(False)
 
     listsArray = Columns_(masterListFrame)
+    Sort_Button(UI, listsArray, statsFrameArray)
 
     masterListFrame.pack(side="left", padx=10, pady=10, fill="both")
 
