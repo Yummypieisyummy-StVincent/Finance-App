@@ -62,10 +62,12 @@ def populateListbox(listsArray, statsFrameArray):
         date = tk.CTkLabel(master=listsArray[1], text=listOfEntries[entry].date)
         reason = tk.CTkLabel(master=listsArray[2], text=listOfEntries[entry].description)
         transaction = tk.CTkLabel(master=listsArray[3], text=str("%.2f" %listOfEntries[entry].amount))
+        removeButton = tk.CTkButton(master=listsArray[4], text="X", fg_color="red", command=lambda entry=entry: [listOfEntries.pop(entry), populateListbox(listsArray, statsFrameArray), calculate(statsFrameArray)])
         job.pack(padx=10)
         date.pack(padx=10)
         reason.pack(padx=10)
         transaction.pack(padx=10)
+        removeButton.pack()
     calculate(statsFrameArray)
 
 def Save_Button():

@@ -38,21 +38,27 @@ def Columns_(parentFrame):
     DateColumn = tk.CTkFrame(master=parentFrame)
     ReasonColumn = tk.CTkFrame(master=parentFrame)
     TransactionColumn = tk.CTkFrame(master=parentFrame)
+    RemoveButtonColumn = tk.CTkFrame(master=parentFrame, width=30)
+
     JobColumn.pack(side="left", fill="y")
     DateColumn.pack(side="left", fill="y")
     ReasonColumn.pack(side="left", fill="y")
     TransactionColumn.pack(side="left", fill="y")
+    RemoveButtonColumn.pack_propagate(False)
+    RemoveButtonColumn.pack(side="left", fill="y")
+    
 
     JobLabelFrame = tk.CTkFrame(master=JobColumn)
-
     DateLabelFrame = tk.CTkFrame(master=DateColumn)
-
     ReasonLabelFrame = tk.CTkFrame(master=ReasonColumn)
     TransactionLabelFrame = tk.CTkFrame(master=TransactionColumn)
+    RemoveButtonLabelFrame = tk.CTkFrame(master=RemoveButtonColumn)
+
     JobLabelFrame.pack(fill="x")
     DateLabelFrame.pack(fill="x")
     ReasonLabelFrame.pack(fill="x")
     TransactionLabelFrame.pack(fill="x")
+    RemoveButtonLabelFrame.pack(fill="x")
 
     JobLabel = tk.CTkLabel(master=JobLabelFrame, text="Job/Place")
     JobLabel.pack(padx=10, pady=10)
@@ -62,6 +68,8 @@ def Columns_(parentFrame):
     ReasonLabel.pack(padx=10, pady=10)
     TransactionLabel = tk.CTkLabel(master=TransactionLabelFrame, text="Transaction")
     TransactionLabel.pack(padx=10, pady=10)
+    RemoveButtonLabel = tk.CTkLabel(master=RemoveButtonLabelFrame, text=" ")
+    RemoveButtonLabel.pack(padx=10, pady=10)
 
     JobListFrame = tk.CTkFrame(master=JobColumn)
     JobListFrame.pack()
@@ -71,11 +79,14 @@ def Columns_(parentFrame):
     ReasonListFrame.pack()
     TransactionListFrame = tk.CTkFrame(master=TransactionColumn)
     TransactionListFrame.pack()
+    RemoveButtonListFrame = tk.CTkFrame(master=RemoveButtonColumn)
+    RemoveButtonListFrame.pack()
 
     listsArray.append(JobListFrame)
     listsArray.append(DateListFrame)
     listsArray.append(ReasonListFrame)
     listsArray.append(TransactionListFrame)
+    listsArray.append(RemoveButtonListFrame)
     return listsArray
 
 def Scroll_Bar(ScrollFrame, listsArray, statsFrameArray):
@@ -108,7 +119,7 @@ def Sort_Button(masterFrame, listsArray, statsFrameArray):
 
 def interface():
     UI = tk.CTk()
-    UI.geometry("1200x600")
+    UI.geometry("900x600")
     UI.title("Finance Tracker")
 
     FileFrame = tk.CTkFrame(master=UI) #This is the frame containing the list, scroll bar, and open/save buttons
@@ -121,7 +132,7 @@ def interface():
     ItemDisplay = tk.CTkFrame(master=FileFrame) #This is the frame containing the list and scroll bar
     ItemDisplay.pack(side="top")
 
-    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=490) #This is the frame containing the list
+    masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=500) #This is the frame containing the list
     masterListFrame.pack_propagate(False)
 
     listsArray = Columns_(masterListFrame)
