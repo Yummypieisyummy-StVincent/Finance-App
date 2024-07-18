@@ -52,6 +52,10 @@ def calculate(statsFrameArray):
 
 def populateListbox(listsArray, statsFrameArray):
     global startIndex, endIndex
+    if(endIndex > len(listOfEntries)):
+        endIndex = len(listOfEntries)
+        if(endIndex > 16):
+            startIndex = endIndex - 16
     start = startIndex
     end = endIndex
     for list in listsArray:
@@ -82,7 +86,7 @@ def Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox):
     ReasonBox.placeholder_text = "Reason of transaction"
     TransactionBox.placeholder_text = "Amount"
 
-def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
+def Add_Button(transactionBox, dateBox, reasonBox, jobBox, ItemDisplay):
 
     if(transactionBox == ""):
         print("Missing input: transactionBox: " + transactionBox)
@@ -96,7 +100,10 @@ def Add_Button(transactionBox, dateBox, reasonBox, jobBox):
     if(jobBox == ""):
         print("Missing input: jobBox: " + jobBox)
         jobBox = "-"
-        
+    
+    if(ItemDisplay.winfo_ismapped() == False):
+        ItemDisplay.pack()
+
     try:
         newEntry = itemClass.Entry(jobBox, dateBox, reasonBox, float(transactionBox))
         listOfEntries.append(newEntry)
@@ -119,7 +126,7 @@ def Overwrite_Button():
     listOfEntries.clear() # Possible Remove
     listOfEntries = dataStorage.load()
 
-def Open_Button(UI, listsArray, statsFrameArray):  
+def Open_Button(UI, listsArray, statsFrameArray, ItemDisplay):  
     global listOfEntries, startIndex
 
     if(len(listOfEntries) > 0):
@@ -132,19 +139,10 @@ def Open_Button(UI, listsArray, statsFrameArray):
         tk.CTkButton(Popup, text="No", command=Popup.destroy).pack()
     else:
         listOfEntries = dataStorage.load()
-
+    if(ItemDisplay.winfo_ismapped() == False):
+        ItemDisplay.pack()
+    
     populateListbox(listsArray, statsFrameArray)
-#def disableCheckDown(button):
-#    if(startIndex == len(listOfEntries)):
-#        button.configure(state=DISABLED)
-#    else:
-#        button.configure(state=NORMAL)
-#
-#def disableCheckUp(button):
-#    if(startIndex == 0):
-#        button.configure(state=DISABLED)
-#    else:
-#        button.configure(state=NORMAL)
 
 def Down_Button(listFrame, statsFrameArray):
     global startIndex, endIndex

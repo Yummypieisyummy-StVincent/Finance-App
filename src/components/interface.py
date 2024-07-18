@@ -9,7 +9,7 @@ tk.set_default_color_theme("blue")
 
 listsArray = [] # This is the array that holds the job, date, reason, and transaction lists
 
-def Entry_Box(masterFrame, listsArray, statsFrameArray):
+def Entry_Box(masterFrame, listsArray, statsFrameArray, ItemDisplay):
     entryFrame = tk.CTkFrame(master=masterFrame)
 
     JobBox = tk.CTkEntry(master=entryFrame, placeholder_text="Job / Place")
@@ -24,7 +24,7 @@ def Entry_Box(masterFrame, listsArray, statsFrameArray):
     DateBox = DateEntry(master=entryFrame)
     DateBox.pack(anchor="center")
 
-    AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get()), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox), commands.populateListbox(listsArray, statsFrameArray)])
+    AddButton = tk.CTkButton(master=entryFrame, text="Add", command=lambda: [commands.Add_Button(TransactionBox.get(), str(DateBox.get_date()), ReasonBox.get(), JobBox.get(), ItemDisplay), commands.Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox), commands.populateListbox(listsArray, statsFrameArray)])
     AddButton.pack(anchor="center")
 
     entryFrame.pack(padx=10, pady=10)
@@ -45,7 +45,7 @@ def Columns_(parentFrame):
     ReasonColumn.pack(side="left", fill="y")
     TransactionColumn.pack(side="left", fill="y")
     RemoveButtonColumn.pack_propagate(False)
-    RemoveButtonColumn.pack(side="left", fill="y")
+    RemoveButtonColumn.pack(side="right", fill="y")
     
 
     JobLabelFrame = tk.CTkFrame(master=JobColumn)
@@ -130,7 +130,7 @@ def interface():
     Stats_Box(rightFrame, statsFrameArray) #This is the frame containing the information about the transactions
     
     ItemDisplay = tk.CTkFrame(master=FileFrame) #This is the frame containing the list and scroll bar
-    ItemDisplay.pack(side="top")
+    #ItemDisplay.pack(side="top") #  <-------------
 
     masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=500) #This is the frame containing the list
     masterListFrame.pack_propagate(False)
@@ -147,11 +147,11 @@ def interface():
     Scroll_Bar(ScrollBar, listsArray, statsFrameArray)
     ScrollBar.pack(side="right", padx=10, pady=10, fill="y")
 
-    Entry_Box(rightFrame, listsArray, statsFrameArray)
+    Entry_Box(rightFrame, listsArray, statsFrameArray, ItemDisplay)
 
     rightFrame.pack(side="right", padx=10, pady=10)
 
-    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray, statsFrameArray))
+    OpenButton = tk.CTkButton(master=FileFrame, text="Open", command=lambda: commands.Open_Button(UI, listsArray, statsFrameArray, ItemDisplay))
     OpenButton.pack(side="bottom")
 
     SaveButton = tk.CTkButton(master=FileFrame, text="Save", command=lambda: commands.Save_Button())
