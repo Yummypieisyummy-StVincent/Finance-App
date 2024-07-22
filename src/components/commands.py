@@ -9,7 +9,7 @@ from customtkinter import CTkToplevel
 
 listOfEntries = []
 startIndex = 0 # This specifies the start index of the list - used when scrolling through large lists of entries
-endIndex = 16
+endIndex = len(listOfEntries) # This specifies the end index of the list - used when scrolling through large lists of entries
 # StatsFrameArray = [TotalMoney, TotalExpenses, TotalIncome, Ratio]
 totalMoney = 0 # [0]
 totalExpenses = 0 # [1]
@@ -45,37 +45,41 @@ def calculate(statsFrameArray):
     statsFrameArray[2].configure(text="Total income: $" + str("%.2f" %totalIncome))
 
     expenses = abs(round(totalExpenses, 2))
-    percentage = (expenses/totalMoney)*100.0
+    if(totalMoney > 0):
+        percentage = (expenses/totalMoney)*100.0
+    else:
+        percentage = 0.0
     ratio = round(percentage, 2)
     statsFrameArray[3].configure(text="Expense Percentage: " + str(ratio) + "%")
     #return totalMoney
 
 def populateListbox(listsArray, statsFrameArray):
     global startIndex, endIndex
-    if(endIndex > len(listOfEntries)):
-        endIndex = len(listOfEntries)
-        if(endIndex > 16):
-            startIndex = endIndex - 16
-    start = startIndex
-    end = endIndex
-    for list in listsArray:
-        for entry in list.winfo_children():
-            entry.destroy()
-    for entry in range(start, end):
-        job = tk.CTkLabel(master=listsArray[0], text=listOfEntries[entry].job)
-        date = tk.CTkLabel(master=listsArray[1], text=listOfEntries[entry].date)
-        reason = tk.CTkLabel(master=listsArray[2], text=listOfEntries[entry].description)
-        transaction = tk.CTkLabel(master=listsArray[3], text=str("%.2f" %listOfEntries[entry].amount))
-        removeButton = tk.CTkButton(master=listsArray[4], text="X", fg_color="red", command=lambda entry=entry: [listOfEntries.pop(entry), populateListbox(listsArray, statsFrameArray), calculate(statsFrameArray)])
-        job.pack(padx=10)
-        date.pack(padx=10)
-        reason.pack(padx=10)
-        transaction.pack(padx=10)
-        removeButton.pack()
-    calculate(statsFrameArray)
+
+    if(len(listOfEntries) > 0):
+        start = startIndex
+        end = endIndex
+        for list in listsArray:
+            for entry in list.winfo_children():
+                entry.destroy()
+        for entry in range(start, end):
+            job = tk.CTkLabel(master=listsArray[0], text=listOfEntries[entry].job)
+            date = tk.CTkLabel(master=listsArray[1], text=listOfEntries[entry].date)
+            reason = tk.CTkLabel(master=listsArray[2], text=listOfEntries[entry].description)
+            transaction = tk.CTkLabel(master=listsArray[3], text=str("%.2f" %listOfEntries[entry].amount))
+            removeButton = tk.CTkButton(master=listsArray[4], text="X", fg_color="red", command=lambda entry=entry: [listOfEntries.pop(entry), populateListbox(listsArray, statsFrameArray), calculate(statsFrameArray)])
+            job.pack(padx=10)
+            date.pack(padx=10)
+            reason.pack(padx=10)
+            transaction.pack(padx=10)
+            removeButton.pack()
+        calculate(statsFrameArray)
 
 def Save_Button():
-    dataStorage.save(listOfEntries)
+    if(listOfEntries != None):
+        dataStorage.save(listOfEntries)
+    else:
+        print("No data to save")
 
 def Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox):
     JobBox.delete(0, 'end')
@@ -87,6 +91,8 @@ def Clear_Text(JobBox, ReasonBox, DateBox, TransactionBox):
     TransactionBox.placeholder_text = "Amount"
 
 def Add_Button(transactionBox, dateBox, reasonBox, jobBox, ItemDisplay):
+
+    global listOfEntries, startIndex, endIndex
 
     if(transactionBox == ""):
         print("Missing input: transactionBox: " + transactionBox)
@@ -112,6 +118,12 @@ def Add_Button(transactionBox, dateBox, reasonBox, jobBox, ItemDisplay):
         print("Invalid input")
         newEntry = None
         return
+    if(endIndex == len(listOfEntries)-1):
+        endIndex += 1
+        startIndex += 1
+    if(len(listOfEntries) < 17):
+        startIndex = 0
+        endIndex = len(listOfEntries)
 
 def Set_Start():
     global startIndex
@@ -129,7 +141,7 @@ def Overwrite_Button():
 def Open_Button(UI, listsArray, statsFrameArray, ItemDisplay):  
     global listOfEntries, startIndex
 
-    if(len(listOfEntries) > 0):
+    if((len(listOfEntries) != 0) and len(listOfEntries) > 0):
         Popup = CTkToplevel(UI)
         Popup.grab_set()
         Popup.title("Warning")
@@ -139,10 +151,12 @@ def Open_Button(UI, listsArray, statsFrameArray, ItemDisplay):
         tk.CTkButton(Popup, text="No", command=Popup.destroy).pack()
     else:
         listOfEntries = dataStorage.load()
-    if(ItemDisplay.winfo_ismapped() == False):
-        ItemDisplay.pack()
-    
-    populateListbox(listsArray, statsFrameArray)
+        if(listOfEntries == None):
+            listOfEntries = []
+        if((ItemDisplay.winfo_ismapped() == False) and (listOfEntries != [])):
+            ItemDisplay.pack()
+    if(listOfEntries != []):
+        populateListbox(listsArray, statsFrameArray)
 
 def Down_Button(listFrame, statsFrameArray):
     global startIndex, endIndex
