@@ -3,35 +3,44 @@
 from tkinter import filedialog
 import json
 import itemClass
-currentFileRead = None
-currentFileWrite = None
+
+currentFile = None
 
 def load():
-    global currentFileWrite
+    global currentFile
     itemList = []
-    file = filedialog.askopenfile(mode="r", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
-    if file is None:
+    File = filedialog.askopenfile(mode="r", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
+    if File is None:
         return
     try:
-        currentFileWrite = open(file.name, "w")
-        print(file)
-        data = json.load(file)
+        print(File)
+        data = json.load(File)
         for entry in data:
             entry = itemClass.Entry(entry['job'], entry['date'], entry['description'], entry['amount'])
             itemList.append(entry)
     except json.JSONDecodeError:
         print("File could not be parsed.")
-        itemList = []
-    file.close()
+    File.close()
+    currentFile = File.name
     return itemList
 
 def save(itemList):
-    if(currentFileWrite is None):
-        file = filedialog.asksaveasfile(mode="w", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
-        if file is None:
+    global currentFile
+    File = open(currentFile, "w")
+    if(File is not None):
+        json.dump([item.to_dict() for item in itemList], File, indent=1)
+        print("File saved")
+        File.close()
+    elif(File is None and len(itemList) != 0):
+        File = filedialog.asksaveasfile(mode="w", filetypes=[("JSON Files", "*.json")], defaultextension=".json")
+        if File is None:
             return
-        json.dump([item.to_dict() for item in itemList], file, indent=1)
-        file.close()
-    elif (currentFileWrite is not None):
-        json.dump([item.to_dict() for item in itemList], currentFileWrite, indent=1)
-        currentFileWrite.close()
+        json.dump([item.to_dict() for item in itemList], File, indent=1)
+        print("New file saved")
+        currentFile = File.name
+        File.close()
+
+def close_program():
+    #if(currentFile is not None):
+    #    currentFile.close()
+    print("File closed")
