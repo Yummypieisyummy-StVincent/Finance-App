@@ -34,11 +34,11 @@ def Columns_(parentFrame):
 
     global listsArray
 
-    JobColumn = tk.CTkFrame(master=parentFrame)
-    DateColumn = tk.CTkFrame(master=parentFrame)
-    ReasonColumn = tk.CTkFrame(master=parentFrame)
-    TransactionColumn = tk.CTkFrame(master=parentFrame)
-    RemoveButtonColumn = tk.CTkFrame(master=parentFrame, width=30)
+    JobColumn = tk.CTkFrame(master=parentFrame, fg_color="#2B2B2B")
+    DateColumn = tk.CTkFrame(master=parentFrame, fg_color="#2B2B2B")
+    ReasonColumn = tk.CTkFrame(master=parentFrame, fg_color="#2B2B2B")
+    TransactionColumn = tk.CTkFrame(master=parentFrame, fg_color="#2B2B2B")
+    RemoveButtonColumn = tk.CTkFrame(master=parentFrame, width=30, fg_color="#2B2B2B")
 
     JobColumn.pack(side="left", fill="y")
     DateColumn.pack(side="left", fill="y")
@@ -129,7 +129,7 @@ def interface():
     statsFrameArray = [tk.CTkLabel, tk.CTkLabel, tk.CTkLabel, tk.CTkLabel] # This is the array that holds the stats labels, PACKED LATER
     Stats_Box(rightFrame, statsFrameArray) #This is the frame containing the information about the transactions
     
-    ItemDisplay = tk.CTkFrame(master=FileFrame) #This is the frame containing the list and scroll bar
+    ItemDisplay = tk.CTkFrame(master=FileFrame, fg_color="#2B2B2B") #This is the frame containing the list and scroll bar
     #ItemDisplay.pack(side="top") #  <-------------
 
     masterListFrame = tk.CTkFrame(master=ItemDisplay, width=550, height=500) #This is the frame containing the list
