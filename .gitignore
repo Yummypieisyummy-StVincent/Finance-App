@@ -13,3 +13,11 @@ src/components/__pycache__/
 .idea/
 *.sublime-*
 /src/components/__pycache__
+
+# Ignore user specific configuration files
+config.json
+
+# Ignore compiled files and logs
+*.log
+/src/components/build/
+/src/components/dist/
